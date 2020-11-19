@@ -1,0 +1,6 @@
+name: Guns
+version: ${project.version}
+main: com.github.beastyboo.guns.application.GunsPlugin
+authors: [BeastyBoo, BeastCraft3]
+description: A simple gun plugin
+website: https://github.com/BeastyBoo
