@@ -136,4 +136,43 @@ public class Gun {
         return recoil;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Gun gun = (Gun) o;
+
+        if (getMaxClipSize() != gun.getMaxClipSize()) return false;
+        if (Double.compare(gun.getDamage(), getDamage()) != 0) return false;
+        if (getReloadTime() != gun.getReloadTime()) return false;
+        if (getBulletPerShot() != gun.getBulletPerShot()) return false;
+        if (getShootDelay() != gun.getShootDelay()) return false;
+        if (getRoundsPerBurst() != gun.getRoundsPerBurst()) return false;
+        if (Double.compare(gun.getRecoil(), getRecoil()) != 0) return false;
+        if (!getName().equals(gun.getName())) return false;
+        if (!getItem().equals(gun.getItem())) return false;
+        if (!getAmmo().equals(gun.getAmmo())) return false;
+        return getSound() == gun.getSound();
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getName().hashCode();
+        result = 31 * result + getItem().hashCode();
+        result = 31 * result + getAmmo().hashCode();
+        result = 31 * result + getMaxClipSize();
+        temp = Double.doubleToLongBits(getDamage());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + getReloadTime();
+        result = 31 * result + getBulletPerShot();
+        result = 31 * result + getSound().hashCode();
+        result = 31 * result + getShootDelay();
+        result = 31 * result + getRoundsPerBurst();
+        temp = Double.doubleToLongBits(getRecoil());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }

@@ -23,4 +23,21 @@ public class Ammo {
         return item;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ammo ammo = (Ammo) o;
+
+        if (!getName().equals(ammo.getName())) return false;
+        return getItem().equals(ammo.getItem());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName().hashCode();
+        result = 31 * result + getItem().hashCode();
+        return result;
+    }
 }
