@@ -1,7 +1,13 @@
 package com.github.beastyboo.guns.domain.entity;
 
+import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
+import java.util.Random;
 
 /**
  * Created by Torbie on 19.11.2020.
@@ -19,6 +25,9 @@ public class Gun {
     private final int shootDelay;
     private final int roundsPerBurst;
     private final double recoil;
+    private final int maxDistance;
+    private final int bulletSpeed;
+    private final double accuracy;
 
     public static class Builder {
 
@@ -27,6 +36,9 @@ public class Gun {
         private final Ammo ammo;
         private final int maxClipSize;
         private final double damage;
+        private final int maxDistance;
+        private final int bulletSpeed;
+        private final double accuracy;
 
         private int shootDelay = 1;
         private int reloadTime = 3;
@@ -35,13 +47,15 @@ public class Gun {
         private double recoil = 2;
         private int bulletPerShot = 1;
 
-        public Builder(String name, ItemStack item, Ammo ammo, int maxClipSize, double damage) {
+        public Builder(String name, ItemStack item, Ammo ammo, int maxClipSize, double damage, int maxDistance, int bulletSpeed, double accuracy) {
             this.name = name;
             this.item = item;
             this.ammo = ammo;
             this.maxClipSize = maxClipSize;
             this.damage = damage;
-
+            this.maxDistance = maxDistance;
+            this.bulletSpeed = bulletSpeed;
+            this.accuracy = accuracy;
         }
 
         public Builder shootDelay(int value) {
@@ -84,12 +98,52 @@ public class Gun {
         ammo = builder.ammo;
         maxClipSize = builder.maxClipSize;
         damage = builder.damage;
+        maxDistance = builder.maxDistance;
+        bulletSpeed = builder.bulletSpeed;
+        accuracy = builder.accuracy;
         reloadTime = builder.reloadTime;
         bulletPerShot = builder.bulletPerShot;
         sound = builder.sound;
         shootDelay = builder.shootDelay;
         roundsPerBurst = builder.roundsPerBurst;
         recoil = builder.recoil;
+    }
+
+    public void shoot(Player p) {
+        Snowball bullet = p.launchProjectile(Snowball.class);
+
+        //doRecoil.
+
+        p.playSound(p.getLocation(), sound, 1.0F, 2.0F);
+
+
+        /**
+         * Accuracy and bullet speed from PvPGunPlus, a plugin which don't exist anymore.
+         */
+
+        int acc = (int) (accuracy * 1000.0D);
+        if (acc <= 0) {
+            acc = 1;
+        }
+
+        Location loc = p.getLocation();
+        Random rand = new Random();
+
+        double dir = -loc.getYaw() - 90.0F;
+        double pitch = -loc.getPitch();
+        double xwep = (rand.nextInt(acc) - rand.nextInt(acc) + 0.5D) / 1000.0D;
+        double ywep = (rand.nextInt(acc) - rand.nextInt(acc) + 0.5D) / 1000.0D;
+        double zwep = (rand.nextInt(acc) - rand.nextInt(acc) + 0.5D) / 1000.0D;
+
+        double xd = Math.cos(Math.toRadians(dir)) * Math.cos(Math.toRadians(pitch)) + xwep;
+        double yd = Math.sin(Math.toRadians(pitch)) + ywep;
+        double zd = -Math.sin(Math.toRadians(dir)) * Math.cos(Math.toRadians(pitch)) + zwep;
+
+        Vector vec = new Vector(xd, yd, zd);
+        vec.multiply(bulletSpeed);
+
+        bullet.setVelocity(vec);
+
     }
 
     public String getName() {
@@ -136,6 +190,18 @@ public class Gun {
         return recoil;
     }
 
+    public int getMaxDistance() {
+        return maxDistance;
+    }
+
+    public int getBulletSpeed() {
+        return bulletSpeed;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -175,4 +241,7 @@ public class Gun {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+
+
 }
