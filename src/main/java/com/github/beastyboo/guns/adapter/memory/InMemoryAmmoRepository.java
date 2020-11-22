@@ -1,4 +1,4 @@
-package com.github.beastyboo.guns.adapter;
+package com.github.beastyboo.guns.adapter.memory;
 
 import com.github.beastyboo.guns.adapter.type.AmmoTypeAdapter;
 import com.github.beastyboo.guns.application.Guns;

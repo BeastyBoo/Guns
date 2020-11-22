@@ -1,6 +1,6 @@
 package com.github.beastyboo.guns.config;
 
-import com.github.beastyboo.guns.adapter.InMemoryGunRepository;
+import com.github.beastyboo.guns.adapter.memory.InMemoryGunRepository;
 import com.github.beastyboo.guns.application.Guns;
 import com.github.beastyboo.guns.domain.port.GunRepository;
 import com.github.beastyboo.guns.usecase.FindGun;
